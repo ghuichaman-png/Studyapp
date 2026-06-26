@@ -142,3 +142,22 @@ body {
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-thumb { @apply bg-slate-300 dark:bg-slate-800; border-radius: 8px; }
 ::-webkit-scrollbar-track { @apply bg-transparent; }
+
+/* ---- Optimizaciones para Dispositivos Móviles (Safe Areas y Touch) ---- */
+header {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+main {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Eliminar resaltado gris molesto al tocar en móviles */
+button, a, input, select, textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Desplazamiento inercial suave en iOS Safari */
+.overflow-y-auto {
+  -webkit-overflow-scrolling: touch;
+}
