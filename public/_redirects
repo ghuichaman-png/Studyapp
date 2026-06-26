@@ -1,0 +1,2 @@
+# Redirect SPA: todas las rutas se sirven con index.html (necesario en Netlify)
+/*  /index.html  200
