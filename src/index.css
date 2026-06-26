@@ -1,9 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 html, body, #root {
@@ -12,8 +14,76 @@ html, body, #root {
 
 body {
   margin: 0;
-  background: #f1f5f9;
-  color: #1e293b;
+  @apply bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-200;
+}
+
+/* ---- Animaciones CSS Puras ---- */
+@keyframes slideUp {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.35s ease-out both;
+}
+
+.animate-pop-in {
+  animation: popIn 0.5s cubic-bezier(.22,1.2,.36,1) both;
+}
+
+.animate-pulse-once {
+  animation: pulse 0.5s ease-in-out;
 }
 
 /* ---- Flip de flashcard (CSS puro) ---- */
@@ -43,6 +113,32 @@ body {
   transform: rotateY(180deg);
 }
 
+/* ---- Borde con gradiente rotativo para flashcards ---- */
+@keyframes rotate-hue {
+  to {
+    filter: hue-rotate(360deg);
+  }
+}
+.gradient-border-anim {
+  position: relative;
+  border-radius: 16px;
+  background: #ffffff;
+}
+.dark .gradient-border-anim {
+  background: #1e293b;
+}
+.gradient-border-anim::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 18px;
+  background: linear-gradient(90deg, #0EA5E9, #8B5CF6, #0EA5E9);
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite, rotate-hue 6s linear infinite;
+  z-index: -1;
+}
+
 /* ---- Scrollbar sutil ---- */
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { @apply bg-slate-300 dark:bg-slate-800; border-radius: 8px; }
+::-webkit-scrollbar-track { @apply bg-transparent; }

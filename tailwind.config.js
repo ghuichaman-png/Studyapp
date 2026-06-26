@@ -1,14 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
     extend: {
       colors: {
-        institutional: '#1e3a5f',
-        'institutional-light': '#2c5282',
-        success: '#2ecc71',
-        amber: '#f39c12',
-        danger: '#e74c3c',
+        institutional: '#0EA5E9',
+        'institutional-light': '#0284C7',
+        success: '#22C55E',
+        amber: '#F59E0B',
+        danger: '#EF4444',
       },
       keyframes: {
         'fade-in':   { '0%': { opacity: 0, transform: 'translateY(8px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },

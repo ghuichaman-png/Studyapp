@@ -10,9 +10,9 @@ import BadgePopup from '../components/BadgePopup'
 
 const ROUND_SIZE = 10
 const DIFFICULTIES = [
-  { key: 'basic',        label: 'Básico',      points: 10, color: '#2ecc71' },
-  { key: 'intermediate', label: 'Intermedio',  points: 20, color: '#f39c12' },
-  { key: 'advanced',     label: 'Avanzado',    points: 30, color: '#e74c3c' },
+  { key: 'basic',        label: 'Básico',      points: 10, color: '#22c55e' }, // green-500
+  { key: 'intermediate', label: 'Intermedio',  points: 20, color: '#8b5cf6' }, // violet-500
+  { key: 'advanced',     label: 'Avanzado',    points: 30, color: '#f59e0b' }, // amber-500
 ]
 const STREAK_BONUS = 5
 const STREAK_MILESTONES = { 3: '¡Racha de 3! 🔥', 5: '¡En llamas! 🔥🔥', 10: '¡Imparable! ⚡' }
@@ -171,17 +171,34 @@ export default function Trivia() {
     const q = questions[idx]
     const diffColor = DIFFICULTIES.find((d) => d.key === difficulty).color
     return (
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-3 text-sm">
-          <span className="font-semibold text-slate-500">Pregunta {idx + 1} de {questions.length}</span>
+      <div className="max-w-2xl mx-auto px-4 py-6 sm:py-10 space-y-6">
+        {/* Top HUD */}
+        <div className="flex items-center justify-between gap-4 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 px-5 py-3.5 rounded-2xl shadow-sm">
+          <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-500 dark:text-slate-400">
+            <span>Pregunta</span>
+            <span className="bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded-lg text-slate-700 dark:text-slate-200">
+              {idx + 1} de {questions.length}
+            </span>
+          </div>
+
           <div className="flex items-center gap-4">
-            <span className="font-semibold text-amber flex items-center gap-1">🔥 Racha {streak}</span>
-            <span className="font-bold text-institutional">{score} pts</span>
+            {/* Racha */}
+            <div className={`flex items-center gap-1.5 font-black text-amber-500 dark:text-amber-400 text-sm sm:text-base transition-all duration-300 ${streak > 0 ? 'scale-110 animate-pulse' : 'opacity-65'}`}>
+              <span className="text-lg">🔥</span>
+              <span>Racha {streak}</span>
+            </div>
+
+            {/* Score */}
+            <div className="flex items-center gap-1.5 font-black text-sky-500 dark:text-sky-400 text-sm sm:text-base">
+              <span className="text-lg">🪙</span>
+              <span>{score} pts</span>
+            </div>
           </div>
         </div>
+
         <ProgressBar value={idx + (answered ? 1 : 0)} max={questions.length} color={diffColor} />
 
-        <div className="mt-6">
+        <div className="mt-4">
           <QuestionCard
             question={q} selected={selected} answered={answered}
             onSelect={answer} onContinue={next}
@@ -189,8 +206,9 @@ export default function Trivia() {
         </div>
 
         {streakMsg && (
-          <div className="fixed top-24 left-1/2 -translate-x-1/2 z-40 bg-amber text-white px-6 py-3 rounded-full font-bold shadow-lg animate-pop-in">
-            {streakMsg}
+          <div className="fixed top-24 left-1/2 -translate-x-1/2 z-40 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-3 rounded-2xl font-black shadow-lg shadow-amber-500/20 border border-amber-400 animate-pop-in text-center flex items-center gap-2">
+            <span>🔥</span>
+            <span>{streakMsg}</span>
           </div>
         )}
       </div>
@@ -223,60 +241,101 @@ function studiedAllTopics(topics) {
 /* ---- Pantalla de configuración ---- */
 function ConfigScreen({ topics, topicId, setTopicId, difficulty, setDifficulty, unlocked, onStart, loading, error }) {
   return (
-    <div className="max-w-xl mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold text-institutional">Trivia de acreditación</h1>
-      <p className="text-slate-500 mt-1">Configura tu ronda de {ROUND_SIZE} preguntas.</p>
+    <div className="max-w-xl mx-auto px-4 py-8 sm:py-12 animate-slide-up">
+      <div className="space-y-2 text-center sm:text-left">
+        <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-800 dark:text-slate-100">
+          Trivia de <span className="bg-gradient-to-r from-sky-500 to-violet-500 bg-clip-text text-transparent">Acreditación</span>
+        </h1>
+        <p className="text-slate-500 dark:text-slate-400 font-semibold tracking-wide text-sm">
+          Elige tus preferencias y desafía tus conocimientos de acreditación.
+        </p>
+      </div>
 
-      <div className="mt-8 bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-6">
+      <div className="mt-8 bg-white dark:bg-slate-800 rounded-[32px] shadow-sm border border-slate-100 dark:border-slate-700/50 p-6 sm:p-8 space-y-6">
         <div>
-          <label className="block text-sm font-semibold text-slate-600 mb-2">Tema</label>
+          <label className="block text-sm font-bold text-slate-600 dark:text-slate-300 mb-2">Tema de Estudio</label>
           <select
             value={topicId} onChange={(e) => setTopicId(e.target.value)}
-            className="w-full border border-slate-300 rounded-xl px-4 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-institutional/40"
+            className="w-full border border-slate-200 dark:border-slate-700 rounded-2xl px-4 py-3 bg-slate-50 dark:bg-slate-900/50 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500 dark:focus:border-sky-400 transition"
           >
-            <option value="all">Todos los temas</option>
-            {topics.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+            <option value="all">📚 Todos los temas</option>
+            {topics.map((t) => <option key={t.id} value={t.id}>📁 {t.name}</option>)}
           </select>
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-slate-600 mb-2">Dificultad</label>
+          <label className="block text-sm font-bold text-slate-600 dark:text-slate-300 mb-3">Nivel de Dificultad</label>
           <div className="grid grid-cols-3 gap-3">
             {DIFFICULTIES.map((d) => {
               const isUnlocked = unlocked[d.key]
               const active = difficulty === d.key
+              
+              const diffStyles = {
+                basic: {
+                  active: 'border-green-500 bg-green-500/5 text-green-700 dark:text-green-400 ring-2 ring-green-500/20 shadow-[0_4px_0_0_rgba(34,197,94,0.4)]',
+                  unlocked: 'border-slate-200 dark:border-slate-700 hover:border-green-500/60 dark:hover:border-green-500/40 text-slate-700 dark:text-slate-300 shadow-[0_4px_0_0_rgba(226,232,240,1)] dark:shadow-[0_4px_0_0_rgba(15,23,42,0.6)]',
+                  icon: '🌱'
+                },
+                intermediate: {
+                  active: 'border-violet-500 bg-violet-500/5 text-violet-700 dark:text-violet-400 ring-2 ring-violet-500/20 shadow-[0_4px_0_0_rgba(139,92,246,0.4)]',
+                  unlocked: 'border-slate-200 dark:border-slate-700 hover:border-violet-500/60 dark:hover:border-violet-500/40 text-slate-700 dark:text-slate-300 shadow-[0_4px_0_0_rgba(226,232,240,1)] dark:shadow-[0_4px_0_0_rgba(15,23,42,0.6)]',
+                  icon: '⚡'
+                },
+                advanced: {
+                  active: 'border-amber-500 bg-amber-500/5 text-amber-700 dark:text-amber-400 ring-2 ring-amber-500/20 shadow-[0_4px_0_0_rgba(245,158,11,0.4)]',
+                  unlocked: 'border-slate-200 dark:border-slate-700 hover:border-amber-500/60 dark:hover:border-amber-500/40 text-slate-700 dark:text-slate-300 shadow-[0_4px_0_0_rgba(226,232,240,1)] dark:shadow-[0_4px_0_0_rgba(15,23,42,0.6)]',
+                  icon: '🔥'
+                }
+              }
+              const style = diffStyles[d.key]
+
               return (
                 <button
                   key={d.key} disabled={!isUnlocked}
                   onClick={() => setDifficulty(d.key)}
-                  className={`rounded-xl border-2 px-3 py-4 text-center transition ${
-                    active ? 'border-institutional bg-institutional/5'
-                    : isUnlocked ? 'border-slate-200 hover:border-institutional/40'
-                    : 'border-slate-100 bg-slate-50 opacity-60 cursor-not-allowed'
+                  className={`group relative rounded-2xl border-2 px-3 py-4 text-center transition-all duration-150 flex flex-col items-center justify-center select-none active:translate-y-0.5 active:shadow-[0_1px_0_0_transparent] ${
+                    active ? style.active
+                    : isUnlocked ? style.unlocked
+                    : 'border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/30 opacity-40 cursor-not-allowed text-slate-400 dark:text-slate-600'
                   }`}
                 >
-                  <div className="font-semibold text-sm" style={{ color: isUnlocked ? d.color : '#94a3b8' }}>
-                    {isUnlocked ? d.label : `🔒 ${d.label}`}
+                  <span className="text-2xl mb-1.5">{isUnlocked ? style.icon : '🔒'}</span>
+                  <div className="font-extrabold text-sm uppercase tracking-wider">
+                    {d.label}
                   </div>
-                  <div className="text-[11px] text-slate-400 mt-1">{d.points} pts c/u</div>
+                  <div className="text-[11px] font-bold text-slate-400 dark:text-slate-500 mt-1">{d.points} pts</div>
                 </button>
               )
             })}
           </div>
           {(!unlocked.intermediate || !unlocked.advanced) && (
-            <p className="text-xs text-slate-400 mt-2">
-              🔒 Desbloquea logrando ≥80% de aciertos en la dificultad anterior.
-            </p>
+            <div className="mt-3 bg-slate-50 dark:bg-slate-900/30 border border-slate-200/10 rounded-xl p-3 flex gap-2 items-center text-xs text-slate-500 dark:text-slate-400">
+              <span className="text-sm">💡</span>
+              <span>Desbloquea dificultades superiores logrando <strong>≥80% de aciertos</strong> en la dificultad previa.</span>
+            </div>
           )}
         </div>
 
-        {error && <div className="text-sm bg-danger/10 text-red-700 border border-danger/30 rounded-lg px-3 py-2">{error}</div>}
+        {error && (
+          <div className="text-sm bg-red-500/10 text-red-700 dark:text-red-400 border border-red-500/20 rounded-xl px-4 py-3 flex gap-2 items-center">
+            <span>⚠️</span>
+            <span>{error}</span>
+          </div>
+        )}
 
         <button
           onClick={onStart} disabled={loading}
-          className="w-full bg-institutional text-white py-3.5 rounded-xl font-bold text-lg hover:bg-institutional-light transition disabled:opacity-60"
+          className="w-full bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-400 hover:to-sky-500 dark:from-sky-400 dark:to-sky-500 dark:hover:from-sky-300 dark:hover:to-sky-400 text-white py-4 rounded-2xl font-black text-lg shadow-[0_4px_0_0_#0284c7] active:translate-y-0.5 active:shadow-[0_0px_0_0_transparent] hover:brightness-105 transition-all duration-100 disabled:opacity-60 disabled:pointer-events-none"
         >
-          {loading ? 'Preparando…' : '▶ Comenzar ronda'}
+          {loading ? (
+            <span className="flex items-center justify-center gap-2">
+              <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+              Cargando preguntas...
+            </span>
+          ) : '🚀 ¡Comenzar Trivia!'}
         </button>
       </div>
     </div>
@@ -287,38 +346,120 @@ function ConfigScreen({ topics, topicId, setTopicId, difficulty, setDifficulty, 
 function ResultsScreen({ score, total, correct, streakMax, wrong, onReplay }) {
   const pct = total > 0 ? Math.round((correct / total) * 100) : 0
   const perfect = correct === total && total > 0
-  return (
-    <div className="max-w-2xl mx-auto px-4 py-10">
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 text-center animate-slide-up">
-        <div className="text-6xl mb-2">{perfect ? '🏆' : pct >= 80 ? '🌟' : pct >= 50 ? '👍' : '📚'}</div>
-        <h1 className="text-2xl font-bold text-institutional">
-          {perfect ? '¡Ronda perfecta!' : '¡Ronda completada!'}
-        </h1>
 
-        <div className="mt-6 grid grid-cols-3 gap-4">
-          <Stat label="Puntaje" value={score} color="#1e3a5f" />
-          <Stat label="Aciertos" value={`${pct}%`} color="#2ecc71" />
-          <Stat label="Racha máx." value={streakMax} color="#f39c12" />
+  // Parametros para el círculo SVG
+  const radius = 50
+  const strokeWidth = 8
+  const normalizedRadius = radius - strokeWidth
+  const circumference = normalizedRadius * 2 * Math.PI
+  const strokeDashoffset = circumference - (pct / 100) * circumference
+
+  let circleColor = 'stroke-red-500 dark:stroke-red-400'
+  let emoji = '🩹'
+  let message = '¡Sigue intentándolo!'
+  let detailMessage = 'Revisa tus respuestas para seguir aprendiendo.'
+
+  if (perfect) {
+    circleColor = 'stroke-green-500 dark:stroke-green-400'
+    emoji = '🏆'
+    message = '¡Ronda perfecta!'
+    detailMessage = '¡Excelente, has acertado todas las preguntas!'
+  } else if (pct >= 80) {
+    circleColor = 'stroke-sky-500 dark:stroke-sky-400'
+    emoji = '🌟'
+    message = '¡Trabajo fantástico!'
+    detailMessage = '¡Estás muy cerca de la perfección!'
+  } else if (pct >= 60) {
+    circleColor = 'stroke-violet-500 dark:stroke-violet-400'
+    emoji = '👍'
+    message = '¡Bien hecho!'
+    detailMessage = 'Has superado la mitad de los aciertos.'
+  }
+
+  return (
+    <div className="max-w-2xl mx-auto px-4 py-8 sm:py-12 space-y-6">
+      <div className="bg-white dark:bg-slate-800 rounded-[32px] shadow-sm border border-slate-100 dark:border-slate-700/50 p-8 text-center animate-slide-up flex flex-col items-center">
+        
+        {/* SVG Circular Progress Meter */}
+        <div className="relative w-36 h-36 flex items-center justify-center mb-4">
+          <svg className="w-full h-full transform -rotate-90">
+            {/* Fondo del círculo */}
+            <circle
+              className="text-slate-100 dark:text-slate-700 stroke-current"
+              strokeWidth={strokeWidth}
+              fill="transparent"
+              r={normalizedRadius}
+              cx={radius + strokeWidth}
+              cy={radius + strokeWidth}
+            />
+            {/* Progreso del círculo */}
+            <circle
+              className={`${circleColor} stroke-current transition-all duration-1000 ease-out`}
+              strokeWidth={strokeWidth}
+              strokeDasharray={circumference + ' ' + circumference}
+              style={{ strokeDashoffset }}
+              strokeLinecap="round"
+              fill="transparent"
+              r={normalizedRadius}
+              cx={radius + strokeWidth}
+              cy={radius + strokeWidth}
+            />
+          </svg>
+          {/* Emojis flotante en el centro */}
+          <div className="absolute text-5xl animate-bounce">{emoji}</div>
         </div>
-        <p className="mt-4 text-sm text-slate-500">{correct} de {total} preguntas correctas</p>
+
+        <h1 className="text-3xl font-black text-slate-800 dark:text-slate-100 leading-tight">
+          {message}
+        </h1>
+        <p className="text-slate-500 dark:text-slate-400 font-medium text-sm mt-1">
+          {detailMessage}
+        </p>
+
+        {/* Stats Grid */}
+        <div className="mt-8 grid grid-cols-3 gap-3.5 w-full">
+          <Stat label="Puntaje" value={`+${score}`} color="text-sky-500 dark:text-sky-400" icon="🪙" />
+          <Stat label="Aciertos" value={`${pct}%`} color="text-green-500 dark:text-green-400" icon="🎯" />
+          <Stat label="Racha Máx." value={streakMax} color="text-amber-500 dark:text-amber-400" icon="🔥" />
+        </div>
+        
+        <p className="mt-5 text-xs text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">
+          Respondiste correctamente {correct} de {total} preguntas
+        </p>
 
         <button
           onClick={onReplay}
-          className="mt-8 bg-success text-white px-8 py-3 rounded-xl font-bold hover:brightness-95 transition"
-        >🔁 Jugar de nuevo</button>
+          className="mt-8 w-full sm:w-auto bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 text-white font-black uppercase text-sm tracking-wider px-10 py-4 rounded-2xl shadow-[0_4px_0_0_#16a34a] active:translate-y-0.5 active:shadow-[0_0px_0_0_transparent] transition-all duration-100"
+        >
+          🔁 Jugar otra ronda
+        </button>
       </div>
 
       {wrong.length > 0 && (
-        <div className="mt-6 bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-          <h2 className="font-bold text-institutional mb-3">Preguntas para repasar</h2>
-          <ul className="space-y-4">
+        <div className="bg-white dark:bg-slate-800 rounded-[32px] shadow-sm border border-slate-100 dark:border-slate-700/50 p-6 sm:p-8 animate-slide-up">
+          <h2 className="text-xl font-black text-slate-800 dark:text-slate-100 mb-4 flex items-center gap-2">
+            <span>📝</span> Preguntas para repasar
+          </h2>
+          <ul className="divide-y divide-slate-100 dark:divide-slate-700/50">
             {wrong.map((q) => (
-              <li key={q.id} className="border-l-4 border-danger pl-3">
-                <p className="font-medium text-slate-700">{q.text}</p>
-                <p className="text-sm text-green-700 mt-1">
-                  ✓ Correcta: <strong className="uppercase">{q.correct_option})</strong> {q[`option_${q.correct_option}`]}
+              <li key={q.id} className="py-4 first:pt-0 last:pb-0 space-y-2">
+                <p className="font-bold text-slate-800 dark:text-slate-100 text-sm sm:text-base leading-relaxed">
+                  {q.text}
                 </p>
-                <p className="text-sm text-slate-500 mt-0.5">{q.explanation}</p>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2.5 text-xs sm:text-sm font-semibold">
+                  <span className="text-green-600 dark:text-green-400 flex items-center gap-1">
+                    <span>✓ Correcta:</span>
+                    <span className="bg-green-500/10 px-2 py-0.5 rounded border border-green-500/20 uppercase font-black">{q.correct_option})</span>
+                  </span>
+                  <span className="text-slate-600 dark:text-slate-300">
+                    {q[`option_${q.correct_option}`]}
+                  </span>
+                </div>
+                {q.explanation && (
+                  <p className="text-xs bg-slate-50 dark:bg-slate-900/50 border border-slate-200/10 p-3 rounded-xl text-slate-500 dark:text-slate-400 leading-relaxed">
+                    <strong>Explicación:</strong> {q.explanation}
+                  </p>
+                )}
               </li>
             ))}
           </ul>
@@ -328,11 +469,13 @@ function ResultsScreen({ score, total, correct, streakMax, wrong, onReplay }) {
   )
 }
 
-function Stat({ label, value, color }) {
+function Stat({ label, value, color, icon }) {
   return (
-    <div className="rounded-xl bg-slate-50 py-4">
-      <div className="text-3xl font-bold" style={{ color }}>{value}</div>
-      <div className="text-xs text-slate-400 mt-1 uppercase tracking-wide">{label}</div>
+    <div className="rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-700/30 py-3.5 px-2 flex flex-col items-center justify-center hover:-translate-y-0.5 transition-transform duration-200">
+      <span className="text-xl sm:text-2xl mb-1">{icon}</span>
+      <div className={`text-2xl sm:text-3xl font-black tracking-tight ${color}`}>{value}</div>
+      <div className="text-[10px] sm:text-xs font-bold text-slate-400 dark:text-slate-500 mt-1 uppercase tracking-wider text-center">{label}</div>
     </div>
   )
 }
+

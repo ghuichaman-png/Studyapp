@@ -102,7 +102,7 @@ export default function QuestionsAdmin() {
     <div className="space-y-6">
       {/* Formulario */}
       <Card>
-        <h2 className="font-bold text-institutional mb-4">{editingId ? 'Editar pregunta' : 'Nueva pregunta'}</h2>
+        <h2 className="text-xl font-black text-slate-800 dark:text-slate-100 mb-4">{editingId ? 'Editar Pregunta' : 'Nueva Pregunta'}</h2>
         <form onSubmit={save} className="space-y-4">
           <div className="grid sm:grid-cols-2 gap-4">
             <Field label="Tema">
@@ -123,22 +123,22 @@ export default function QuestionsAdmin() {
           <div className="grid sm:grid-cols-2 gap-3">
             {OPTS.map((o) => (
               <Field key={o} label={`Opción ${o.toUpperCase()}`}>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <input type="radio" name="correct" checked={form.correct_option === o}
                     onChange={() => setForm((f) => ({ ...f, correct_option: o }))}
-                    title="Marcar como correcta" className="accent-success w-4 h-4" />
+                    title="Marcar como correcta" className="accent-green-500 w-5 h-5 cursor-pointer" />
                   <input className={inputCls} required value={form[`option_${o}`]} onChange={set(`option_${o}`)} />
                 </div>
               </Field>
             ))}
           </div>
-          <p className="text-xs text-slate-400">El radio marcado indica la respuesta correcta (actual: <strong className="uppercase">{form.correct_option}</strong>).</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500 font-semibold">El selector marcado indica la respuesta correcta (actual: <strong className="uppercase">{form.correct_option}</strong>).</p>
           <Field label="Explicación (obligatoria)">
             <textarea className={inputCls} rows={2} required value={form.explanation} onChange={set('explanation')} />
           </Field>
           <Notice error={error} success={flash} />
-          <div className="flex gap-2">
-            <Btn type="submit">{editingId ? 'Guardar cambios' : 'Crear pregunta'}</Btn>
+          <div className="flex gap-2 pt-2">
+            <Btn type="submit">{editingId ? 'Guardar' : 'Crear'}</Btn>
             {editingId && <Btn type="button" variant="ghost" onClick={reset}>Cancelar</Btn>}
           </div>
         </form>
@@ -146,7 +146,7 @@ export default function QuestionsAdmin() {
 
       {/* Import/Export */}
       <Card className="flex flex-wrap items-center gap-3 !py-4">
-        <span className="font-semibold text-slate-600 text-sm mr-auto">Banco: {questions.length} preguntas</span>
+        <span className="font-bold text-slate-600 dark:text-slate-400 text-sm mr-auto">Banco: {questions.length} preguntas</span>
         <Btn variant="ghost" onClick={exportJson}>⬇ Exportar JSON</Btn>
         <input ref={fileRef} type="file" accept="application/json" onChange={importJson} className="hidden" id="importInput" />
         <Btn variant="success" onClick={() => fileRef.current?.click()}>⬆ Importar JSON</Btn>
@@ -154,30 +154,33 @@ export default function QuestionsAdmin() {
 
       {/* Listado */}
       <Card>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="font-bold text-institutional">Listado</h2>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+          <h2 className="text-xl font-black text-slate-800 dark:text-slate-100">Banco de Preguntas</h2>
           <select className={inputCls + ' !w-auto'} value={filterTopic} onChange={(e) => setFilterTopic(e.target.value)}>
-            <option value="all">Todos los temas</option>
+            <option value="all">📚 Todos los temas</option>
             {topics.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
           </select>
         </div>
-        <div className="space-y-2">
-          {filtered.length === 0 ? <p className="text-slate-400 text-sm">Sin preguntas.</p> :
+        <div className="space-y-3">
+          {filtered.length === 0 ? <p className="text-slate-405 dark:text-slate-500 font-semibold text-sm">Sin preguntas.</p> :
             filtered.map((q) => (
-              <div key={q.id} className="flex items-start gap-3 bg-slate-50 rounded-lg px-3 py-2 text-sm">
+              <div key={q.id} className="flex items-start gap-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200/10 rounded-xl p-4 text-sm text-slate-700 dark:text-slate-350">
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-slate-700">{q.text}</p>
-                  <p className="text-xs text-slate-400 mt-0.5">
+                  <p className="font-extrabold text-slate-850 dark:text-slate-100 leading-snug">{q.text}</p>
+                  <p className="text-xs text-slate-450 dark:text-slate-500 font-bold mt-1">
                     {topicName(q.topic_id)} · {DIFFS.find((d) => d.v === q.difficulty)?.l} · Correcta: <strong className="uppercase">{q.correct_option}</strong>
                   </p>
                 </div>
-                <Btn variant="ghost" onClick={() => startEdit(q)}>Editar</Btn>
-                <Btn variant="danger" onClick={() => remove(q.id)}>✕</Btn>
+                <div className="flex gap-2 shrink-0 self-center">
+                  <Btn variant="ghost" onClick={() => startEdit(q)} className="!py-1.5 !px-3 text-xs">Editar</Btn>
+                  <Btn variant="danger" onClick={() => remove(q.id)} className="!py-1.5 !px-3 text-xs">✕</Btn>
+                </div>
               </div>
             ))
           }
         </div>
       </Card>
+
     </div>
   )
 }

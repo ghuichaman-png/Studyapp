@@ -12,8 +12,8 @@ export default function ContentAdmin() {
     if (!topicId && topics.length) setTopicId(topics[0].id)
   }, [topics, topicId])
 
-  if (loading) return <p className="text-slate-400">Cargando…</p>
-  if (!topics.length) return <p className="text-slate-400">Crea un tema primero en la pestaña «Temas».</p>
+  if (loading) return <p className="text-slate-400 dark:text-slate-500 font-semibold">Cargando…</p>
+  if (!topics.length) return <p className="text-slate-405 dark:text-slate-500 font-semibold">Crea un tema primero en la pestaña «Temas».</p>
 
   return (
     <div className="space-y-6">
@@ -78,16 +78,16 @@ function SummaryEditor({ topicId }) {
 
   return (
     <Card>
-      <h2 className="font-bold text-institutional mb-3">📝 Resumen</h2>
-      {loading ? <p className="text-slate-400">Cargando…</p> : (
+      <h2 className="text-xl font-black text-slate-800 dark:text-slate-100 mb-3">📝 Resumen</h2>
+      {loading ? <p className="text-slate-400 dark:text-slate-500 font-semibold">Cargando resumen…</p> : (
         <>
           <textarea
             className={inputCls + ' font-mono text-sm'} rows={8} value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Usa ## o ### para crear secciones de acordeón."
           />
-          <p className="text-xs text-slate-400 mt-1">Tip: encabezados con <code>##</code> o <code>###</code> se muestran como acordeón.</p>
-          <div className="mt-3 flex items-center gap-3">
+          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1.5 font-medium">Tip: encabezados con <code>##</code> o <code>###</code> se muestran como acordeón.</p>
+          <div className="mt-4 flex items-center gap-3">
             <Btn onClick={save}>Guardar resumen</Btn>
             <Notice error={error} success={flash} />
           </div>
@@ -126,7 +126,7 @@ function FlashcardsEditor({ topicId }) {
 
   return (
     <Card>
-      <h2 className="font-bold text-institutional mb-3">🃏 Flashcards <span className="text-sm font-normal text-slate-400">({cards.length})</span></h2>
+      <h2 className="text-xl font-black text-slate-800 dark:text-slate-100 mb-3">🃏 Flashcards <span className="text-sm font-bold text-slate-400 dark:text-slate-500">({cards.length})</span></h2>
       <form onSubmit={add} className="grid sm:grid-cols-2 gap-3">
         <Field label="Frente (pregunta)">
           <input className={inputCls} required value={front} onChange={(e) => setFront(e.target.value)} />
@@ -134,19 +134,21 @@ function FlashcardsEditor({ topicId }) {
         <Field label="Reverso (respuesta)">
           <input className={inputCls} required value={back} onChange={(e) => setBack(e.target.value)} />
         </Field>
-        <div className="sm:col-span-2 flex items-center gap-3">
+        <div className="sm:col-span-2 flex items-center gap-3 pt-2">
           <Btn type="submit" variant="success">Agregar flashcard</Btn>
           <Notice error={error} success={flash} />
         </div>
       </form>
-      <ul className="mt-4 space-y-2">
-        {cards.map((c) => (
-          <li key={c.id} className="flex items-center gap-3 bg-slate-50 rounded-lg px-3 py-2 text-sm">
-            <span className="flex-1"><strong>{c.front}</strong> → {c.back}</span>
-            <Btn variant="danger" onClick={() => remove(c.id)}>✕</Btn>
-          </li>
-        ))}
-      </ul>
+      {cards.length > 0 && (
+        <ul className="mt-4 space-y-2 max-h-64 overflow-y-auto">
+          {cards.map((c) => (
+            <li key={c.id} className="flex items-center justify-between gap-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200/10 rounded-xl px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300">
+              <span className="flex-1 truncate"><strong>{c.front}</strong> → {c.back}</span>
+              <button type="button" className="text-red-500 dark:text-red-400 hover:text-red-650 font-bold px-2 py-1 transition-colors" onClick={() => remove(c.id)}>✕</button>
+            </li>
+          ))}
+        </ul>
+      )}
     </Card>
   )
 }
@@ -179,7 +181,7 @@ function SimpleListEditor({ topicId, table, title, icon, fields, display }) {
 
   return (
     <Card>
-      <h2 className="font-bold text-institutional mb-3">{icon} {title} <span className="text-sm font-normal text-slate-400">({rows.length})</span></h2>
+      <h2 className="text-xl font-black text-slate-800 dark:text-slate-100 mb-3">{icon} {title} <span className="text-sm font-bold text-slate-400 dark:text-slate-500">({rows.length})</span></h2>
       <form onSubmit={add} className="grid sm:grid-cols-2 gap-3">
         {fields.map((f) => (
           <Field key={f.k} label={f.label}>
@@ -187,19 +189,22 @@ function SimpleListEditor({ topicId, table, title, icon, fields, display }) {
               onChange={(e) => setForm((s) => ({ ...s, [f.k]: e.target.value }))} />
           </Field>
         ))}
-        <div className="sm:col-span-2 flex items-center gap-3">
+        <div className="sm:col-span-2 flex items-center gap-3 pt-2">
           <Btn type="submit" variant="success">Agregar</Btn>
           <Notice error={error} success={flash} />
         </div>
       </form>
-      <ul className="mt-4 space-y-2">
-        {rows.map((r) => (
-          <li key={r.id} className="flex items-center gap-3 bg-slate-50 rounded-lg px-3 py-2 text-sm">
-            <a href={r.url} target="_blank" rel="noopener noreferrer" className="flex-1 truncate text-institutional hover:underline">{display(r)}</a>
-            <Btn variant="danger" onClick={() => remove(r.id)}>✕</Btn>
-          </li>
-        ))}
-      </ul>
+      {rows.length > 0 && (
+        <ul className="mt-4 space-y-2">
+          {rows.map((r) => (
+            <li key={r.id} className="flex items-center justify-between gap-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200/10 rounded-xl px-4 py-2.5 text-sm text-slate-700 dark:text-slate-350">
+              <a href={r.url} target="_blank" rel="noopener noreferrer" className="flex-1 truncate text-violet-600 dark:text-violet-400 hover:underline font-semibold">{display(r)}</a>
+              <button type="button" className="text-red-500 dark:text-red-400 hover:text-red-650 font-bold px-2 py-1 transition-colors" onClick={() => remove(r.id)}>✕</button>
+            </li>
+          ))}
+        </ul>
+      )}
     </Card>
   )
 }
+
