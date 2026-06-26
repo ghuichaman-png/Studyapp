@@ -256,6 +256,152 @@ function TopicDetail({ topic, onBack }) {
   )
 }
 
+/* ---- Ayudantes de Formateo de Markdown ---- */
+
+function parseInlineStyles(text) {
+  if (!text) return '';
+  // Separamos por negritas
+  const boldParts = text.split('**');
+  return boldParts.flatMap((boldPart, bIdx) => {
+    const isBold = bIdx % 2 === 1;
+    // Separamos por cursivas
+    const italicParts = boldPart.split('*');
+    const elements = italicParts.map((italicPart, iIdx) => {
+      const isItalic = iIdx % 2 === 1;
+      if (isItalic) {
+        return <em key={`${bIdx}-${iIdx}`} className="italic font-semibold">{italicPart}</em>;
+      }
+      return italicPart;
+    });
+
+    if (isBold) {
+      return (
+        <strong key={bIdx} className="font-extrabold text-slate-800 dark:text-white">
+          {elements}
+        </strong>
+      );
+    }
+    return elements;
+  });
+}
+
+function parseMarkdownToBlocks(text) {
+  if (!text) return [];
+  const lines = text.split('\n');
+  const blocks = [];
+  let currentBlock = null;
+
+  for (let line of lines) {
+    const trimmedLine = line.trim();
+    if (!trimmedLine) {
+      if (currentBlock) {
+        blocks.push(currentBlock);
+        currentBlock = null;
+      }
+      continue;
+    }
+
+    const indentMatch = line.match(/^(\s*)/);
+    const indent = indentMatch ? indentMatch[1].length : 0;
+
+    // Detectar viñeta desordenada (* o -)
+    const ulMatch = line.match(/^(\s*)([\*\-])\s+(.*)/);
+    if (ulMatch) {
+      const content = ulMatch[3];
+      if (currentBlock && currentBlock.type === 'ul') {
+        currentBlock.items.push({ indent, content });
+      } else {
+        if (currentBlock) blocks.push(currentBlock);
+        currentBlock = { type: 'ul', items: [{ indent, content }] };
+      }
+      continue;
+    }
+
+    // Detectar lista numerada (e.g. 1.)
+    const olMatch = line.match(/^(\s*)(\d+)\.\s+(.*)/);
+    if (olMatch) {
+      const content = olMatch[3];
+      if (currentBlock && currentBlock.type === 'ol') {
+        currentBlock.items.push({ indent, content });
+      } else {
+        if (currentBlock) blocks.push(currentBlock);
+        currentBlock = { type: 'ol', items: [{ indent, content }] };
+      }
+      continue;
+    }
+
+    // Línea de párrafo normal
+    if (currentBlock && currentBlock.type === 'p') {
+      currentBlock.lines.push(trimmedLine);
+    } else {
+      if (currentBlock) blocks.push(currentBlock);
+      currentBlock = { type: 'p', indent, lines: [trimmedLine] };
+    }
+  }
+
+  if (currentBlock) {
+    blocks.push(currentBlock);
+  }
+
+  return blocks;
+}
+
+function MarkdownContent({ text }) {
+  const blocks = useMemo(() => parseMarkdownToBlocks(text), [text]);
+
+  return (
+    <div className="space-y-3">
+      {blocks.map((block, bIdx) => {
+        if (block.type === 'p') {
+          return (
+            <p
+              key={bIdx}
+              className="text-slate-600 dark:text-slate-350 leading-relaxed font-medium text-sm sm:text-base"
+              style={{ marginLeft: block.indent ? `${block.indent * 6}px` : undefined }}
+            >
+              {parseInlineStyles(block.lines.join(' '))}
+            </p>
+          );
+        }
+
+        if (block.type === 'ul') {
+          return (
+            <ul key={bIdx} className="list-disc pl-5 space-y-2 text-slate-600 dark:text-slate-350 text-sm sm:text-base">
+              {block.items.map((item, iIdx) => (
+                <li
+                  key={iIdx}
+                  className="font-medium leading-relaxed"
+                  style={{ marginLeft: item.indent ? `${item.indent * 6}px` : undefined }}
+                >
+                  {parseInlineStyles(item.content)}
+                </li>
+              ))}
+            </ul>
+          );
+        }
+
+        if (block.type === 'ol') {
+          return (
+            <ol key={bIdx} className="list-decimal pl-5 space-y-2 text-slate-600 dark:text-slate-350 text-sm sm:text-base">
+              {block.items.map((item, iIdx) => (
+                <li
+                  key={iIdx}
+                  className="font-medium leading-relaxed"
+                  style={{ marginLeft: item.indent ? `${item.indent * 6}px` : undefined }}
+                >
+                  {parseInlineStyles(item.content)}
+                </li>
+              ))}
+            </ol>
+          );
+        }
+
+        return null;
+      })}
+    </div>
+  );
+}
+
 /* ---- Pestañas ---- */
 
 // Resumen con acordeón por secciones marcadas con "### " o "## ".
@@ -266,8 +412,8 @@ function SummaryTab({ text }) {
   if (!text) return <EmptyState text="Aún no se ha cargado un resumen para este tema." />
   if (sections.length <= 1) {
     return (
-      <article className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-850 p-6 rounded-3xl text-slate-700 dark:text-slate-300 leading-relaxed font-medium whitespace-pre-wrap text-sm sm:text-base transition-colors duration-200">
-        {text}
+      <article className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-850 p-6 rounded-3xl text-slate-700 dark:text-slate-300 leading-relaxed font-medium text-sm sm:text-base transition-colors duration-200">
+        <MarkdownContent text={text} />
       </article>
     )
   }
@@ -284,8 +430,8 @@ function SummaryTab({ text }) {
             <span className={`transition-transform duration-200 text-lg ${open[i] ? 'rotate-180 text-sky-500' : 'text-slate-400'}`}>▾</span>
           </button>
           {open[i] && (
-            <div className="px-5 py-4 border-t border-slate-100 dark:border-slate-700/40 text-slate-600 dark:text-slate-300 text-sm leading-relaxed whitespace-pre-wrap font-medium animate-fade-in">
-              {sec.body}
+            <div className="px-5 py-4 border-t border-slate-100 dark:border-slate-700/40 text-slate-600 dark:text-slate-300 text-sm leading-relaxed font-medium animate-fade-in">
+              <MarkdownContent text={sec.body} />
             </div>
           )}
         </div>
