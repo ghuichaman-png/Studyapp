@@ -5,23 +5,47 @@
 -- =====================================================================
 
 -- ---------- 1. TEMAS ----------
-insert into public.topics (id, name, description, color, order_index) values
+insert into public.topics (id, name, category, description, color, order_index) values
   ('33333333-3333-3333-3333-333333333333',
    'Accidentes con Antineoplásicos',
+   'Acreditación HPM',
    'Manejo ante exposición accidental con antineoplásicos y derrames.',
    '#e74c3c', 3),
   ('44444444-4444-4444-4444-444444444444',
    'Clave Roja HPM (#121)',
+   'Acreditación HPM',
    'Protocolo de respuesta inmediata y activación de Clave Roja ante emergencias vitales.',
    '#c0392b', 4),
   ('55555555-5555-5555-5555-555555555555',
    'Comités de Ética (CEA y CEC)',
+   'Acreditación HPM',
    'Estructura, funciones y canales de consulta al CEA y al CEC del HPM.',
    '#2980b9', 5),
-  ('66666666-6666-6666-6666-666666666666',
-   'Derechos, Deberes y Procedimientos Generales',
-   'Acceso a Historia Clínica, credenciales, accidentes cortopunzantes y evacuación A.L.E.',
-   '#16a085', 6)
+  ('66666666-6666-6666-6666-666666666661',
+   'Historia Clínica',
+   'Acreditación HPM',
+   'Normas de confidencialidad, estructura, acceso y copias de la historia clínica.',
+   '#16a085', 6),
+  ('66666666-6666-6666-6666-666666666662',
+   'Uso de la Credencial',
+   'Acreditación HPM',
+   'Uso obligatorio de la identificación del personal según la Ley 20.584.',
+   '#2c3e50', 7),
+  ('66666666-6666-6666-6666-666666666663',
+   'Accidente Cortopunzante (Exposición a Fluidos)',
+   'Acreditación HPM',
+   'Primeros auxilios y flujo de atención ante exposición de fluidos o material cortopunzante.',
+   '#e67e22', 8),
+  ('66666666-6666-6666-6666-666666666664',
+   'OIRS (Informaciones, Reclamos y Sugerencias)',
+   'Acreditación HPM',
+   'Canales de participación ciudadana y cómo canalizar felicitaciones o reclamos.',
+   '#8e44ad', 9),
+  ('66666666-6666-6666-6666-666666666665',
+   'Evacuación A.L.E. (Código Verde)',
+   'Acreditación HPM',
+   'Protocolo de evacuación organizada de pacientes y funcionarios en el HPM.',
+   '#27ae60', 10)
 on conflict (id) do nothing;
 
 -- ---------- 2. RESÚMENES (Sección Educativa /study) ----------
@@ -92,37 +116,38 @@ Entidad encargada de revisar, evaluar y aprobar protocolos de investigación cie
 * El CEC del Servicio de Salud del Reloncaví sesiona en **Esmeralda 269, piso 2, oficina 202, Puerto Montt**.
 * Correo de contacto: **comiteeticocientifico@ssdr.gob.cl** (Anexo interno: **658400**).'),
 
-  ('66666666-6666-6666-6666-666666666666',
-'# 📁 Derechos, Deberes e Información General
-Resumen de protocolos institucionales fundamentales sobre confidencialidad, accidentes de personal y evacuación.
-
-## 1. Historia Clínica
+  ('66666666-6666-6666-6666-666666666661',
+   '# 📁 Historia Clínica
 La Historia Clínica es un documento fundamental, único, individual y confidencial.
 * **Estructura:** Debe conservar su estructura ordenada y cronológica (de la atención más antigua a la más reciente).
 * **Acceso:** 
   1. *Papel:* Solicitar a la Unidad de Archivo con el RUT del paciente.
   2. *Digital:* Ingresar al sistema con clave digital y RUT del paciente.
   Ambos formatos se vinculan por el RUT del paciente.
-* **Copia para el paciente:** Se debe solicitar formalmente en la oficina de **OIRS**.
+* **Copia para el paciente:** Se debe solicitar formalmente en la oficina de **OIRS**.'),
 
-## 2. Uso de la Credencial
-El uso de la credencial es **obligatorio** para todo el personal, en conformidad con la **Ley 20.584** de Derechos y Deberes de los Pacientes.
+  ('66666666-6666-6666-6666-666666666662',
+   '# 🪪 Uso de la Credencial
+El uso de la credencial es **obligatorio** para todo el personal, en conformidad con la **Ley 20.584** de Derechos y Deberes de los Pacientes.'),
 
-## 3. Exposición con Fluidos (Accidente Cortopunzante)
+  ('66666666-6666-6666-6666-666666666663',
+   '# 🩸 Accidente Cortopunzante (Exposición a Fluidos)
 En caso de accidentes con material cortopunzante o fluidos corporales, siga estos pasos:
 1. **Lavar inmediatamente** la zona afectada con abundante agua o suero fisiológico por **10 a 15 minutos** y dejar secar al aire libre.
 2. Informar de inmediato a su **jefe directo** o reemplazo.
 3. Identificar al **paciente fuente** para definir el tratamiento profiláctico a seguir.
 4. **Flujo de atención médica:**
    * **Horario hábil:** Acudir al **Policlínico del Personal** para atención médica y generar la DIAT (Anexo interno: **652207**).
-   * **Horario inhábil:** Acudir a la **UTI Médica** para la atención de urgencia (Anexo interno: **652429**). Asistir al Policlínico del Personal al día hábil siguiente para finalizar el proceso.
+   * **Horario inhábil:** Acudir a la **UTI Médica** para la atención de urgencia (Anexo interno: **652429**). Asistir al Policlínico del Personal al día hábil siguiente para finalizar el proceso.'),
 
-## 4. OIRS (Oficina de Informaciones, Reclamos y Sugerencias)
+  ('66666666-6666-6666-6666-666666666664',
+   '# 💬 OIRS (Informaciones, Reclamos y Sugerencias)
 Para sugerencias, reclamos o felicitaciones:
 * Buzones físicos en **Urgencia** y **Hall del Hospital Amigo**.
-* Portal web oficial: **oirs.minsal.cl**.
+* Portal web oficial: **oirs.minsal.cl**.'),
 
-## 5. Evacuación A.L.E. (Código Verde)
+  ('66666666-6666-6666-6666-666666666665',
+   '# 🟢 Evacuación A.L.E. (Código Verde)
 Código Verde se define como la evacuación organizada de pacientes y funcionarios.
 * **A (Autoconvocarse):** Dirigirse al punto de reunión establecido del servicio.
 * **L (Líder):** Seguir las instrucciones del Líder (jefe de servicio, supervisor o persona a cargo).
@@ -141,10 +166,18 @@ insert into public.flashcards (topic_id, front, back, order_index) values
   -- Comités de Ética
   ('55555555-5555-5555-5555-555555555555', '¿Qué día de la semana sesiona el Comité de Ética Asistencial (CEA)?', 'Todos los martes.', 6),
   ('55555555-5555-5555-5555-555555555555', '¿Qué comité aprueba obligatoriamente las investigaciones científicas en seres humanos?', 'El Comité Ético Científico (CEC).', 7),
-  -- Derechos y Protocolos
-  ('66666666-6666-6666-6666-666666666666', '¿Qué ley hace obligatorio el uso de la credencial en personal de salud?', 'La Ley 20.584 (Derechos y Deberes de los Pacientes).', 8),
-  ('66666666-6666-6666-6666-666666666666', '¿Dónde acudir ante un accidente cortopunzante en horario inhábil?', 'A la UTI Médica (Anexo 652429) y al día hábil siguiente al Policlínico del Personal.', 9),
-  ('66666666-6666-6666-6666-666666666666', '¿Qué significan las siglas A.L.E. en evacuación?', 'Autoconvocarse al punto de reunión, Líder (seguir instrucciones), Evacuación del recinto.', 10)
+  -- Historia Clínica
+  ('66666666-6666-6666-6666-666666666661', '¿De qué formas se vincula y puede acceder el personal a la Historia Clínica?', 'Se vincula por el RUT; acceso papel en Archivo o digital con clave y RUT del paciente.', 8),
+  ('66666666-6666-6666-6666-666666666661', '¿Dónde solicita formalmente el paciente una copia de su Historia Clínica?', 'En la oficina de OIRS.', 9),
+  -- Uso de la Credencial
+  ('66666666-6666-6666-6666-666666666662', '¿Qué ley hace obligatorio el uso de la credencial en personal de salud?', 'La Ley 20.584 (Derechos y Deberes de los Pacientes).', 10),
+  -- Accidente Cortopunzante
+  ('66666666-6666-6666-6666-666666666663', '¿Dónde acudir ante un accidente cortopunzante en horario inhábil?', 'A la UTI Médica (Anexo 652429) y al día hábil siguiente al Policlínico del Personal.', 11),
+  ('66666666-6666-6666-6666-666666666663', '¿Cuánto tiempo se debe lavar la herida ante un accidente cortopunzante?', 'Con abundante agua o suero fisiológico por 10 a 15 minutos.', 12),
+  -- OIRS
+  ('66666666-6666-6666-6666-666666666664', '¿Qué canales oficiales tiene la OIRS para sugerencias o reclamos?', 'Buzones físicos en Urgencia y Hall de Hospital Amigo, y el portal oirs.minsal.cl.', 13),
+  -- Evacuación A.L.E.
+  ('66666666-6666-6666-6666-666666666665', '¿Qué significan las siglas A.L.E. en evacuación?', 'Autoconvocarse al punto de reunión, Líder (seguir instrucciones), Evacuación del recinto.', 14)
 on conflict do nothing;
 
 -- ---------- 4. PREGUNTAS DE TRIVIA ----------
@@ -309,50 +342,8 @@ insert into public.questions
    'b', 'advanced',
    'El CEC sesiona fuera del recinto hospitalario principal, específicamente en calle Esmeralda 269, piso 2, oficina 202, en la ciudad de Puerto Montt.'),
 
-  -- TEMA 4 · Derechos, Deberes y Procedimientos Generales
-  ('66666666-6666-6666-6666-666666666666',
-   '¿Qué ley de la República de Chile regula el uso obligatorio de la credencial en el personal de salud?',
-   'Ley 16.744 sobre accidentes del trabajo',
-   'Ley 20.584 sobre Derechos y Deberes de los Pacientes',
-   'Ley 19.628 sobre protección de la vida privada',
-   'Ley 21.030 sobre causales de interrupción del embarazo',
-   'b', 'basic',
-   'La Ley 20.584 de Derechos y Deberes de los Pacientes exige que todo funcionario de salud se identifique obligatoriamente portando su credencial.'),
-
-  ('66666666-6666-6666-6666-666666666666',
-   'En el protocolo de evacuación organizada "Código Verde", ¿qué significan las siglas A.L.E.?',
-   'Alarma general, Llamar emergencia, Evacuación inmediata',
-   'Autoconvocarse al punto de reunión, Líder (seguir instrucciones), Evacuación del recinto',
-   'Avisar a jefaturas, Limpieza de accesos, Enviar pacientes',
-   'Asistencia básica, Libre tránsito, Extintores listos',
-   'b', 'basic',
-   'Las siglas A.L.E. significan: Autoconvocarse al punto de reunión, Líder (seguir instrucciones del líder) y Evacuación del recinto hacia una zona segura.'),
-
-  ('66666666-6666-6666-6666-666666666666',
-   '¿A través de qué oficina del hospital puede el paciente solicitar formalmente una copia de su Historia Clínica?',
-   'Urgencia', 'OIRS', 'UTI Médica', 'Policlínico del Personal',
-   'b', 'basic',
-   'Las solicitudes de copia de la Historia Clínica (que es confidencial y con datos sensibles) deben canalizarse formalmente a través de la OIRS.'),
-
-  ('66666666-6666-6666-6666-666666666666',
-   '¿Cuál es la primera acción de primeros auxilios ante un accidente cortopunzante o exposición a fluidos?',
-   'Aplicar alcohol al 70% o povidona yodada en la herida',
-   'Lavar con abundante agua o suero fisiológico por 10 a 15 minutos y dejar secar al aire',
-   'Exprimir la zona para forzar el sangrado y desinfectar',
-   'Acudir de inmediato al servicio de Urgencia sin lavar la zona',
-   'b', 'intermediate',
-   'El primer paso es lavar profusamente con agua limpia o suero fisiológico durante 10 a 15 minutos, dejando secar la zona al aire libre.'),
-
-  ('66666666-6666-6666-6666-666666666666',
-   '¿Dónde debe acudir un funcionario que sufre una exposición accidental a fluidos corporales en horario INHÁBIL?',
-   'Al Policlínico del Personal de inmediato',
-   'A la UTI Médica (Anexo 652429)',
-   'A la Urgencia general del Hospital',
-   'A su consultorio correspondiente a su domicilio',
-   'b', 'intermediate',
-   'En horario inhábil, el funcionario debe acudir a la UTI Médica (Anexo 652429) para su atención y profilaxis inicial.'),
-
-  ('66666666-6666-6666-6666-666666666666',
+  -- TEMA 6 · Historia Clínica
+  ('66666666-6666-6666-6666-666666666661',
    '¿De qué formas se vincula y puede acceder el personal a la Historia Clínica de un paciente?',
    'Se vincula por el RUT; acceso papel en Archivo o digital con clave y RUT del paciente',
    'Únicamente en carpetas físicas solicitadas al médico tratante',
@@ -361,7 +352,7 @@ insert into public.questions
    'a', 'intermediate',
    'La Historia Clínica se vincula por el RUT y se accede físicamente (papel) en la Unidad de Archivo o digitalmente con clave autorizada y RUT del paciente.'),
 
-  ('66666666-6666-6666-6666-666666666666',
+  ('66666666-6666-6666-6666-666666666661',
    '¿Qué característica de confidencialidad y ordenamiento posee la Historia Clínica?',
    'Es un documento público y de libre acceso, ordenado por fecha de egreso',
    'Es única, individual y confidencial; ordenada cronológicamente de la atención más antigua a la más reciente',
@@ -370,7 +361,53 @@ insert into public.questions
    'b', 'advanced',
    'La Historia Clínica es única, individual y confidencial. Debe conservar una estructura estrictamente ordenada y cronológica (desde lo más antiguo a lo más reciente).'),
 
-  ('66666666-6666-6666-6666-666666666666',
+  -- TEMA 7 · Uso de la Credencial
+  ('66666666-6666-6666-6666-666666666662',
+   '¿Qué ley de la República de Chile regula el uso obligatorio de la credencial en el personal de salud?',
+   'Ley 16.744 sobre accidentes del trabajo',
+   'Ley 20.584 sobre Derechos y Deberes de los Pacientes',
+   'Ley 19.628 sobre protección de la vida privada',
+   'Ley 21.030 sobre causales de interrupción del embarazo',
+   'b', 'basic',
+   'La Ley 20.584 de Derechos y Deberes de los Pacientes exige que todo funcionario de salud se identifique obligatoriamente portando su credencial.'),
+
+  -- TEMA 8 · Accidente Cortopunzante (Exposición a Fluidos)
+  ('66666666-6666-6666-6666-666666666663',
+   '¿Cuál es la primera acción de primeros auxilios ante un accidente cortopunzante o exposición a fluidos?',
+   'Aplicar alcohol al 70% o povidona yodada en la herida',
+   'Lavar con abundante agua o suero fisiológico por 10 a 15 minutos y dejar secar al aire',
+   'Exprimir la zona para forzar el sangrado y desinfectar',
+   'Acudir de inmediato al servicio de Urgencia sin lavar la zona',
+   'b', 'intermediate',
+   'El primer paso es lavar profusamente con agua limpia o suero fisiológico durante 10 a 15 minutos, dejando secar la zona al aire libre.'),
+
+  ('66666666-6666-6666-6666-666666666663',
+   '¿Dónde debe acudir un funcionario que sufre una exposición accidental a fluidos corporales en horario INHÁBIL?',
+   'Al Policlínico del Personal de inmediato',
+   'A la UTI Médica (Anexo 652429)',
+   'A la Urgencia general del Hospital',
+   'A su consultorio correspondiente a su domicilio',
+   'b', 'intermediate',
+   'En horario inhábil, el funcionario debe acudir a la UTI Médica (Anexo 652429) para su atención y profilaxis inicial.'),
+
+  -- TEMA 9 · OIRS
+  ('66666666-6666-6666-6666-666666666664',
+   '¿A través de qué oficina del hospital puede el paciente solicitar formalmente una copia de su Historia Clínica?',
+   'Urgencia', 'OIRS', 'UTI Médica', 'Policlínico del Personal',
+   'b', 'basic',
+   'Las solicitudes de copia de la Historia Clínica (que es confidencial y con datos sensibles) deben canalizarse formalmente a través de la OIRS.'),
+
+  -- TEMA 10 · Evacuación A.L.E. (Código Verde)
+  ('66666666-6666-6666-6666-666666666665',
+   'En el protocolo de evacuación organizada "Código Verde", ¿qué significan las siglas A.L.E.?',
+   'Alarma general, Llamar emergencia, Evacuación inmediata',
+   'Autoconvocarse al punto de reunión, Líder (seguir instrucciones), Evacuación del recinto',
+   'Avisar a jefaturas, Limpieza de accesos, Enviar pacientes',
+   'Asistencia básica, Libre tránsito, Extintores listos',
+   'b', 'basic',
+   'Las siglas A.L.E. significan: Autoconvocarse al punto de reunión, Líder (seguir instrucciones del líder) y Evacuación del recinto hacia una zona segura.'),
+
+  ('66666666-6666-6666-6666-666666666665',
    'En el protocolo de evacuación organizada "Código Verde", ¿quién asume la función de "Líder"?',
    'El primer funcionario que detecte la emergencia',
    'El médico especialista con mayor antigüedad en el turno',
