@@ -554,7 +554,7 @@ function ImagesTab({ images }) {
           >
             <div className="overflow-hidden w-full h-40 bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
               <img
-                src={img.url} alt={img.title || ''} loading="lazy"
+                src={resolveImageUrl(img.url)} alt={img.title || ''} loading="lazy"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
             </div>
@@ -574,7 +574,7 @@ function ImagesTab({ images }) {
           className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md grid place-items-center p-4 animate-fade-in cursor-zoom-out"
         >
           <figure className="max-w-3xl flex flex-col items-center">
-            <img src={lightbox.url} alt={lightbox.title || ''} className="max-h-[75vh] max-w-full rounded-2xl border border-white/10 shadow-2xl animate-pop-in" />
+            <img src={resolveImageUrl(lightbox.url)} alt={lightbox.title || ''} className="max-h-[75vh] max-w-full rounded-2xl border border-white/10 shadow-2xl animate-pop-in" />
             {lightbox.title && <figcaption className="text-center text-slate-200 font-bold text-base mt-4 bg-slate-900/60 border border-slate-800 px-4 py-2 rounded-xl">{lightbox.title}</figcaption>}
           </figure>
         </div>
@@ -630,4 +630,15 @@ function ErrorMsg({ text }) {
       ⚠️ {text}
     </div>
   )
+}
+
+function resolveImageUrl(url) {
+  if (!url) return '';
+  // Convertir enlaces de visualización de Google Drive a URLs de descarga directa (imagen cruda)
+  const driveRegex = /(?:drive\.google\.com\/(?:file\/d\/|open\?id=)|docs\.google\.com\/(?:file\/d\/|open\?id=))([a-zA-Z0-9_-]+)/;
+  const match = url.match(driveRegex);
+  if (match && match[1]) {
+    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+  }
+  return url;
 }
