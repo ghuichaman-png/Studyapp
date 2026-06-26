@@ -22,6 +22,7 @@ create table if not exists public.profiles (
 create table if not exists public.topics (
   id           uuid primary key default gen_random_uuid(),
   name         text not null,
+  category     text not null default 'Acreditación HPM',
   description  text,
   color        text default '#1e3a5f',
   order_index  int  not null default 0,

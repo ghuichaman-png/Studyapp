@@ -33,6 +33,28 @@ export default function Study() {
   // Estadísticas del usuario para gamificación (Duolingo style)
   const [stats, setStats] = useState({ score: 0, badges: 0, accuracy: 0 })
 
+  // Estado para la categoría seleccionada
+  const [selectedCategory, setSelectedCategory] = useState('Acreditación HPM')
+
+  // Obtener categorías únicas de los temas
+  const categories = useMemo(() => {
+    const cats = new Set()
+    topics.forEach((t) => {
+      if (t.category) cats.add(t.category)
+    })
+    // Siempre nos aseguramos de tener al menos 'Acreditación HPM'
+    if (cats.size === 0) {
+      cats.add('Acreditación HPM')
+    }
+    return Array.from(cats)
+  }, [topics])
+
+  // Filtrar temas según la categoría seleccionada
+  const filteredTopics = useMemo(() => {
+    if (selectedCategory === 'Todos') return topics
+    return topics.filter((t) => (t.category || 'Acreditación HPM') === selectedCategory)
+  }, [topics, selectedCategory])
+
   useEffect(() => {
     if (!user) return
     let active = true
@@ -86,9 +108,31 @@ export default function Study() {
                 {profile?.username || 'Jugador'}
               </span>! 👋
             </h1>
-            <p className="text-slate-500 dark:text-slate-400 font-semibold tracking-wide text-sm sm:text-base">
-              Acreditación HPM 2025
-            </p>
+            
+            {categories.length > 1 ? (
+              <div className="relative inline-block text-left mt-1.5">
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="bg-white/80 dark:bg-slate-805/85 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs sm:text-sm font-bold rounded-xl pl-3 pr-8 py-2 hover:bg-slate-50 dark:hover:bg-slate-700/60 focus:outline-none focus:ring-2 focus:ring-sky-500/20 transition-all cursor-pointer appearance-none shadow-sm font-sans"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`,
+                    backgroundPosition: 'right 0.6rem center',
+                    backgroundSize: '1rem',
+                    backgroundRepeat: 'no-repeat',
+                  }}
+                >
+                  <option value="Todos">📚 Todos los temas</option>
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>📁 {cat}</option>
+                  ))}
+                </select>
+              </div>
+            ) : (
+              <p className="text-slate-500 dark:text-slate-400 font-bold tracking-wide text-sm sm:text-base mt-1.5 flex items-center gap-1.5 justify-center sm:justify-start">
+                <span className="text-sky-500">📁</span> Acreditación HPM
+              </p>
+            )}
           </div>
           
           {/* Stats Grid */}
@@ -123,11 +167,11 @@ export default function Study() {
             </div>
           </div>
           
-          {topics.length === 0 ? (
-            <EmptyState text="Aún no hay temas de estudio disponibles." />
+          {filteredTopics.length === 0 ? (
+            <EmptyState text="Aún no hay temas de estudio disponibles para esta categoría." />
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {topics.map((t) => (
+              {filteredTopics.map((t) => (
                 <TopicCard
                   key={t.id} topic={t} reviewed={!!reviewed[t.id]}
                   onClick={() => setParams({ topic: t.id })}

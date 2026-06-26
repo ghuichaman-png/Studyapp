@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useTopics } from '../hooks/useTopics'
 import { Field, inputCls, Btn, Card, Notice, useFlash } from './ui'
 
-const EMPTY = { name: '', description: '', color: '#1e3a5f', order_index: 0 }
+const EMPTY = { name: '', description: '', color: '#1e3a5f', order_index: 0, category: 'Acreditación HPM' }
 
 export default function TopicsAdmin() {
   const { user } = useAuth()
@@ -19,7 +19,13 @@ export default function TopicsAdmin() {
 
   function startEdit(t) {
     setEditingId(t.id)
-    setForm({ name: t.name, description: t.description || '', color: t.color || '#1e3a5f', order_index: t.order_index })
+    setForm({
+      name: t.name,
+      description: t.description || '',
+      color: t.color || '#1e3a5f',
+      order_index: t.order_index,
+      category: t.category || 'Acreditación HPM'
+    })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
   function reset() { setEditingId(null); setForm(EMPTY) }
@@ -29,6 +35,7 @@ export default function TopicsAdmin() {
     setError(null); setBusy(true)
     const payload = {
       name: form.name.trim(),
+      category: form.category ? form.category.trim() : 'Acreditación HPM',
       description: form.description.trim(),
       color: form.color,
       order_index: Number(form.order_index) || 0,
@@ -61,6 +68,9 @@ export default function TopicsAdmin() {
           <Field label="Nombre">
             <input className={inputCls} required value={form.name} onChange={set('name')} />
           </Field>
+          <Field label="Categoría">
+            <input className={inputCls} placeholder="Ej: Acreditación HPM" value={form.category} onChange={set('category')} />
+          </Field>
           <Field label="Descripción">
             <textarea className={inputCls} rows={3} value={form.description} onChange={set('description')} />
           </Field>
@@ -79,7 +89,7 @@ export default function TopicsAdmin() {
           </div>
         </form>
       </Card>
-
+      
       {/* Listado */}
       <div className="lg:col-span-3 space-y-3">
         {loading ? <p className="text-slate-400 dark:text-slate-500 font-semibold">Cargando temas…</p> :
@@ -89,7 +99,9 @@ export default function TopicsAdmin() {
               <span className="h-10 w-2.5 rounded-full shrink-0" style={{ backgroundColor: t.color }} />
               <div className="flex-1 min-w-0">
                 <p className="font-extrabold text-slate-800 dark:text-slate-100 truncate">{t.name}</p>
-                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-450 truncate">{t.description || 'Sin descripción'}</p>
+                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-450 truncate">
+                  {t.category ? `[${t.category}] ` : ''}{t.description || 'Sin descripción'}
+                </p>
               </div>
               <span className="text-xs font-bold text-slate-400 dark:text-slate-500">#{t.order_index}</span>
               <Btn variant="ghost" onClick={() => startEdit(t)}>Editar</Btn>
